@@ -1,25 +1,21 @@
 import React from 'react';
 import {StyleSheet, Text, ToastAndroid, TextInput, View, Button} from 'react-native';
-// import Constants from 'expo-constants';
-import {Menus} from './menu'
 import {useSelector, useDispatch} from 'react-redux'
 import {addLevel} from '../store/levels'
+import Title from '../common/title'
 
-export const Feedback = ({navigation}) => {
+export const Feedback = () => {
 	return (
 		<View>
-			<Menus navigation={navigation} />
-			<Text>feedback list here</Text>
+			<Title title='Feedback list goes here...' />
 		</View>
 	)
 }
-Feedback.navigationOptions = {title: 'Feedback', headerLeft: null}
 
-export const AddLevel = ({navigation}) => {
+export const AddLevel = () => {
 	const [value, updateValue] = React.useState('')
 
 	const dispatch = useDispatch();
-
 
 	const handleAdd = () => {
 		ToastAndroid.show('Level added', ToastAndroid.SHORT);
@@ -30,7 +26,6 @@ export const AddLevel = ({navigation}) => {
 
 	return (
 		<View>
-			<Menus navigation={navigation} />
 			<TextInput
 				style={{height: 40, borderColor: 'gray', borderWidth: 1}}
 				onChangeText={updateValue}
@@ -44,30 +39,14 @@ export const AddLevel = ({navigation}) => {
 		</View>
 	)
 }
-AddLevel.navigationOptions = {title: 'Add a new level', headerLeft: null, headerBackTitle: null}
-
-// const mapStateToProps = (state) => ({
-// 	// todos: getVisibleTodos(state.todos, state.visibilityFilter)
-// 	// active: ''
-// })
-
-// const mapDispatchToProps = (dispatch: Dispatch) => ({
-// 	addLevel: (title: string) => dispatch(addLevel(title))
-// })
-
-// export const AddLevel = connect(
-// 	mapStateToProps,
-// 	mapDispatchToProps
-// )(AddLevelBase)
-
 
 const OneLevel = ({name, handleEdit}) =>
 	<View style={{
 		flexDirection: 'row',
 		justifyContent: 'space-between',
-		// alignContent: 'space-between',
 	}}>
 		<View style={{flex: 1, padding: 10}}>
+			{/* <Title title={name} /> */}
 			<Text>{name}</Text>
 		</View>
 		<View style={{flex: 1}}>
@@ -79,31 +58,18 @@ const OneLevel = ({name, handleEdit}) =>
 	</View>
 
 export default function AdminListLevels({navigation}) {
-	const handleDelete = (id) => () => {
-		console.log('delete', id)
+	const handleEdit = (id: number) => () => {
+		navigation.navigate('edit', {id})
 	}
 
 	const levels = useSelector(state => state.LevelReducer.levels)
 
-	// const [levels, setLevels] = React.useState([])
-
-	// React.useEffect(() => {
-	// 	setLevels([{
-	// 		id: 1,
-	// 		name: 'test',
-	// 	}])
-	// }, [])
-
 	return (
 		<View>
-			<Menus navigation={navigation} />
-
-			{levels.map((level) => <OneLevel key={level.id} name={`Level ${level.level} - ${level.title}`} handleDelete={handleDelete(level.id)} />)}
+			{levels.map((level) => <OneLevel key={level.id} name={`Level ${level.level} - ${level.title}`} handleEdit={handleEdit(level.id)} />)}
 		</View>
 	)
 }
-
-AdminListLevels.navigationOptions = {title: 'All levels', headerLeft: null}
 
 const styles = StyleSheet.create({
 

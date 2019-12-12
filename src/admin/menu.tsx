@@ -31,6 +31,6 @@ const styles = StyleSheet.create({
 		backgroundColor: colours.active,
 	},
 	active: {
-		backgroundColor: colours.last,
+		backgroundColor: colours.title,
 	}
 });

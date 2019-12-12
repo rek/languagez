@@ -1,11 +1,13 @@
 import React from 'react';
-import {View, Text} from 'react-native';
+import {View} from 'react-native';
 import {useSelector} from 'react-redux';
+
+import Title from '../common/title'
 
 const OneLevel = ({name}) =>
 	<View style={{
 	}}>
-		<Text>{name}</Text>
+		<Title title={name} />
 	</View>
 
 export default function ListLevels({}) {
@@ -19,7 +21,7 @@ export default function ListLevels({}) {
 
 	return (
 		<View>
-			{levels.map((level) => <OneLevel key={level.id} name={`Level ${level.level} ${level.progress}/${level.total}`} />)}
+			{levels.map((level) => <OneLevel key={level.id} name={`Level ${level.level} - ${level.progress}/${level.total}`} />)}
 		</View>
 	)
 }
