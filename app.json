@@ -3,7 +3,7 @@
     "name": "Language Learning App",
     "slug": "languagez",
     "privacy": "public",
-    "sdkVersion": "35.0.0",
+    "sdkVersion": "36.0.0",
     "platforms": [
       "android"
     ],

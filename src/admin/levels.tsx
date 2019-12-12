@@ -1,8 +1,10 @@
 import React from 'react';
 import {StyleSheet, Text, ToastAndroid, TextInput, View, Button} from 'react-native';
 import {useSelector, useDispatch} from 'react-redux'
+
 import {addLevel} from '../store/levels'
 import Title from '../common/title'
+import {colours} from '../utils/constants'
 
 export const Feedback = () => {
 	return (
@@ -65,12 +67,14 @@ export default function AdminListLevels({navigation}) {
 	const levels = useSelector(state => state.LevelReducer.levels)
 
 	return (
-		<View>
+		<View style={styles.container}>
 			{levels.map((level) => <OneLevel key={level.id} name={`Level ${level.level} - ${level.title}`} handleEdit={handleEdit(level.id)} />)}
 		</View>
 	)
 }
 
 const styles = StyleSheet.create({
-
+	container: {
+		backgroundColor: colours.second,
+	}
 })

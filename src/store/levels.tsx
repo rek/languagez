@@ -46,6 +46,12 @@ const initialLevelState: LevelState = {
 		items: [{
 			name: 'KA',
 			image: ''
+		}, {
+			name: 'BA',
+			image: ''
+		}, {
+			name: 'GA',
+			image: ''
 		}],
 	}]
 }

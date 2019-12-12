@@ -11,4 +11,4 @@ const styles = StyleSheet.create({
 	}
 })
 
-export default styles
+export const textInput = styles.textInput

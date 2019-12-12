@@ -12,7 +12,7 @@ import EditComponent from './edit';
 const WrapPageWithMenu = (Page, title: string, options: any = {}) => {
 	const Wrapped = ({navigation}) => {
 		return (
-			<View>
+			<View style={styles.page}>
 				<Menus navigation={navigation} />
 				<Page navigation={navigation} />
 			</View>
@@ -35,7 +35,7 @@ const RootStack = createStackNavigator({
 	feedback: {screen: WrapPageWithMenu(Feedback, 'Feedback')},
 	edit: {
 		screen: EditComponent,
-		navigationOptions: ({ navigation }) => ({
+		navigationOptions: ({navigation}) => ({
 			headerShown: false,
 		}),
 	}
@@ -67,6 +67,9 @@ export default function AdminModule() {
 AdminModule.navigationOptions = {title: 'Admin'}
 
 const styles = StyleSheet.create({
+	page: {
+		backgroundColor: colours.second,
+	},
 	container: {
 		flex: 1,
 		// marginTop: Constants.statusBarHeight,
