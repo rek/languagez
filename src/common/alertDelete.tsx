@@ -6,7 +6,7 @@ interface Props {
 
 function Component({deleteAction}: Props) {
 	Alert({
-		title: '',
+		title: 'Are you sure you want to delete?',
 		message: '',
 		yesAction: deleteAction,
 	})

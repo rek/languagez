@@ -11,7 +11,7 @@ import {
 
 import Title from '../common/title'
 import {textInput} from '../utils/styles';
-import {addItemToLevel} from '../store/levels';
+import {addItemToLevel, levelItemEdit, levelItemDelete, TItem} from '../store/levels';
 import Upload from '../common/upload'
 import {Simple} from '../common/button'
 import AlertDelete from '../common/alertDelete'
@@ -26,6 +26,14 @@ const EditComponent: React.SFC<Props> = ({navigation}) => {
 	const id = navigation.state.params.id
 
 	const dispatch = useDispatch();
+
+	const handleDelete = (name) => () => {
+		AlertDelete({
+			deleteAction: () => {
+				dispatch(levelItemDelete(id, name))
+			}
+		})
+	}
 
 	const handleAdd = () => {
 		ToastAndroid.showWithGravity('Item added', ToastAndroid.SHORT, ToastAndroid.CENTER);
@@ -73,13 +81,18 @@ const EditComponent: React.SFC<Props> = ({navigation}) => {
 				// flex: 1,
 				// alignItems: 'flex-start',
 				// flexDirection: 'column',
-
 			}}>
 
 				<FlatList
 					data={level.items}
 					renderItem={({item}) => {
-						return <OneItem name={item.name} />
+						const {name} = item as TItem
+						return (
+							<OneItem
+								name={name}
+								handleDelete={handleDelete(name)}
+							/>
+						)
 					}}
 					keyExtractor={item => item.name}
 				/>
@@ -93,18 +106,19 @@ const EditComponent: React.SFC<Props> = ({navigation}) => {
 
 interface OneItemProps {
 	name: string,
+	handleDelete: () => void,
 }
-const OneItem: React.SFC<OneItemProps> = ({name}) => {
+const OneItem: React.SFC<OneItemProps> = ({name, handleDelete}) => {
+	// const dispatch = useDispatch();
+	console.log('{name, handleDelete}', {name, handleDelete})
+
 	const handleEdit = () => {
 		AlertDelete({deleteAction: () => {
 			console.log('edit!!', name)
+			// dispatch(levelItemEdit())
 		}})
 	}
-	const handleDelete = () => {
-		AlertDelete({deleteAction: () => {
-			console.log('delete!!', name)
-		}})
-	}
+
 	return (
 		<View style={{
 			flex: 1,
@@ -117,6 +131,7 @@ const OneItem: React.SFC<OneItemProps> = ({name}) => {
 
 		}}>
 			<Text style={{flex: 3}}>{name}</Text>
+
 			<Upload
 				renderUploadButton={({onPress}) => {
 					return (

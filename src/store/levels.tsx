@@ -1,24 +1,48 @@
 const ADD_LEVEL = 'ADD_LEVEL'
-const ADD_ITEM_TO_LEVEL = 'ADD_ITEM_TO_LEVEL'
+const DELETE_LEVEL = 'DELETE_LEVEL'
+
+const LEVEL_ITEM_DELETE = 'LEVEL_ITEM_DELETE'
+const LEVEL_ITEM_ADD = 'LEVEL_ITEM_ADD'
+const LEVEL_ITEM_EDIT = 'LEVEL_ITEM_EDIT'
 
 //
 // ACTIONS
 //
+
 interface AddAction {
 	type: typeof ADD_LEVEL;
 	title: string;
 }
-interface AddItemAction {
-	type: typeof ADD_ITEM_TO_LEVEL;
-	level: number;
-	name: string;
-}
-
 export function addLevel(title: string): AddAction {
 	return {type: ADD_LEVEL, title}
 }
+
+interface AddItemAction {
+	type: typeof LEVEL_ITEM_ADD;
+	level: number;
+	name: string;
+}
 export function addItemToLevel(level: number, name: string): AddItemAction {
-	return {type: ADD_ITEM_TO_LEVEL, level, name}
+	return {type: LEVEL_ITEM_ADD, level, name}
+}
+
+interface ActionItemEdit {
+	type: typeof LEVEL_ITEM_EDIT;
+	level: number;
+	name: string;
+	name_new: string;
+}
+export function levelItemEdit({level, name, name_new}: ActionItemEdit): ActionItemEdit {
+	return {type: LEVEL_ITEM_EDIT, level, name, name_new}
+}
+
+interface ActionItemDelete {
+	type: typeof LEVEL_ITEM_DELETE;
+	level: number;
+	item: string;
+}
+export function levelItemDelete(level: number, item: string): ActionItemDelete {
+	return {type: LEVEL_ITEM_DELETE, level, item}
 }
 
 //
@@ -31,15 +55,16 @@ export type TLevel = {
 	locked: boolean,
 	progress: number,
 	total: number,
+	created: string,
 	title: string,
-	items: item[],
+	items: TItem[],
 }
 
 export interface State {
 	levels: TLevel[]
 }
 
-export interface item {
+export interface TItem {
 	name: string,
 	image?: string,
 }
@@ -47,6 +72,7 @@ export interface item {
 const levelDefaults = {
 	level: 1,
 	locked: false,
+	created: new Date(),
 	progress: 0,
 	total: 100,
 	items: [],
@@ -57,7 +83,8 @@ const initialState: State = {
 		id: 1,
 		level: 1,
 		locked: false,
-		progress: 0,
+		created: '0',
+		progress: 1,
 		total: 100,
 		title: 'Level 1',
 		items: [{
@@ -75,7 +102,7 @@ const initialState: State = {
 
 export const Reducer = (
 	state = initialState,
-	action: AddAction | AddItemAction
+	action: AddAction | AddItemAction | ActionItemDelete | ActionItemEdit
 ) => {
 
 	switch (action.type) {
@@ -88,7 +115,19 @@ export const Reducer = (
 				}, ...state.levels]
 			};
 
-		case ADD_ITEM_TO_LEVEL:
+		case LEVEL_ITEM_DELETE:
+			return {
+				levels: state.levels.map((level) => {
+					return level.id === action.level
+						? {
+							...level,
+							items: level.items.filter((item) => item.name !== action.item)
+						}
+						: level
+				})
+			}
+
+		case LEVEL_ITEM_ADD:
 			return {
 				levels: state.levels.map((level) => {
 					return level.id === action.level
