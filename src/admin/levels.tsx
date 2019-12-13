@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, Text, ToastAndroid, TextInput, View, Button} from 'react-native';
+import {StyleSheet, Text, ToastAndroid, TextInput, View, Button, Keyboard} from 'react-native';
 import {useSelector, useDispatch} from 'react-redux'
 
 import {addLevel} from '../store/levels'
@@ -14,7 +14,7 @@ export const Feedback = () => {
 	)
 }
 
-export const AddLevel = () => {
+export const AddLevel = ({navigation}) => {
 	const [value, updateValue] = React.useState('')
 
 	const dispatch = useDispatch();
@@ -24,6 +24,8 @@ export const AddLevel = () => {
 
 		dispatch(addLevel(value))
 		updateValue('')
+		Keyboard.dismiss()
+		navigation.navigate('show')
 	}
 
 	return (

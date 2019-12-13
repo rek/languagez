@@ -1,5 +1,5 @@
 import React from 'react'
-import {StyleSheet, ToastAndroid, TextInput, Text, View, Button} from 'react-native';
+import {StyleSheet, ToastAndroid, TextInput, Text, FlatList, View, Button, Keyboard} from 'react-native';
 import {useSelector, useDispatch} from 'react-redux'
 import {colours} from '../utils/constants'
 
@@ -13,6 +13,8 @@ import Title from '../common/title'
 import {textInput} from '../utils/styles';
 import {addItemToLevel} from '../store/levels';
 import Upload from '../common/upload'
+import {Simple} from '../common/button'
+import AlertDelete from '../common/alertDelete'
 
 interface Props {
 	navigation: NavigationScreenProp<NavigationState, NavigationParams>;
@@ -29,6 +31,7 @@ const EditComponent: React.SFC<Props> = ({navigation}) => {
 		ToastAndroid.showWithGravity('Item added', ToastAndroid.SHORT, ToastAndroid.CENTER);
 		dispatch(addItemToLevel(id, value))
 		updateValue('')
+		Keyboard.dismiss()
 	}
 
 	const levels = useSelector(state => state.LevelReducer.levels)
@@ -53,20 +56,35 @@ const EditComponent: React.SFC<Props> = ({navigation}) => {
 				value={value}
 			/>
 
-			<Button
-				title="Add item"
-				onPress={handleAdd}
-			/>
+			<View style={{
+				width: 100,
+				marginLeft: 10,
+				marginBottom: 50,
+			}}>
+				<Button
+					title="Add item"
+					onPress={handleAdd}
+				/>
+			</View>
 
 			<Title title={`All things in level ${id}`} />
 
 			<View style={{
-				flex: 1,
-				alignItems: 'flex-start',
-				flexDirection: 'column',
+				// flex: 1,
+				// alignItems: 'flex-start',
+				// flexDirection: 'column',
 
 			}}>
-				{level.items.map((item) => <OneItem key={item.name} name={item.name} />)}
+
+				<FlatList
+					data={level.items}
+					renderItem={({item}) => {
+						return <OneItem name={item.name} />
+					}}
+					keyExtractor={item => item.name}
+				/>
+
+				{/* {level.items.map((item) => <OneItem key={item.name} name={item.name} />)} */}
 			</View>
 
 		</View>
@@ -77,18 +95,46 @@ interface OneItemProps {
 	name: string,
 }
 const OneItem: React.SFC<OneItemProps> = ({name}) => {
+	const handleEdit = () => {
+		AlertDelete({deleteAction: () => {
+			console.log('edit!!', name)
+		}})
+	}
+	const handleDelete = () => {
+		AlertDelete({deleteAction: () => {
+			console.log('delete!!', name)
+		}})
+	}
 	return (
 		<View style={{
 			flex: 1,
+			width: 300,
 			flexDirection: 'row',
-			margin: 20,
+			margin: 10,
 			padding: 10,
 			borderWidth: 1,
 			borderColor: '#000'
 
 		}}>
 			<Text style={{flex: 3}}>{name}</Text>
-			<Upload style={{}}/>
+			<Upload
+				renderUploadButton={({onPress}) => {
+					return (
+						<Simple
+							title="Upload"
+							onPress={onPress}
+						/>
+					)
+				}}
+			/>
+			<Simple
+				title="Edit"
+				onPress={handleEdit}
+			/>
+			<Simple
+				title="Delete"
+				onPress={handleDelete}
+			/>
 		</View>
 	)
 }

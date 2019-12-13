@@ -68,6 +68,7 @@ AdminModule.navigationOptions = {title: 'Admin'}
 
 const styles = StyleSheet.create({
 	page: {
+		flex: 1,
 		backgroundColor: colours.second,
 	},
 	container: {

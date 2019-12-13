@@ -20,10 +20,15 @@ import * as Permissions from "expo-permissions";
 
 interface Props {
 	handleUpload?: (image: string) => void,
+	renderUploadButton?: ({onPress: any}) => React.ReactElement,
 	image?: string,
 }
 
-const Component: React.SFC<Props> = ({handleUpload, image}) => {
+const Component: React.SFC<Props> = ({
+	handleUpload,
+	renderUploadButton,
+	image,
+}) => {
 	const [internalImage, setImage] = useState(null);
 	const [uploading, setUploading] = useState(false);
 
@@ -108,14 +113,20 @@ const Component: React.SFC<Props> = ({handleUpload, image}) => {
 		}
 	}, []);
 
+	const UploadButton = () => {
+		if (renderUploadButton) {
+			return renderUploadButton({onPress: pickImage})
+		}
+
+		return <Button onPress={pickImage} title="Upload" />
+	}
+
 	return (
 		<View style={styles.container}>
 			<StatusBar barStyle="default" />
 
 			{/* <Button onPress={takePhoto} title="Take a photo" /> */}
-			{!internalImage &&
-				<Button onPress={pickImage} title="Upload" />
-			}
+			{!internalImage && <UploadButton />}
 
 			{internalImage && (
 				<Image source={{uri: `data:image/jpeg;base64,${internalImage}`}} style={styles.maybeRenderImage} />
@@ -183,8 +194,8 @@ const Component: React.SFC<Props> = ({handleUpload, image}) => {
 
 const styles = StyleSheet.create({
 	container: {
-		flex: 1,
-		margin: 10,
+		// flex: 1,
+		// margin: 10,
 	},
 	maybeRenderUploading: {
 		alignItems: "center",
