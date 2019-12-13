@@ -61,13 +61,13 @@ const initialState: State = {
 		total: 100,
 		title: 'test',
 		items: [{
-			name: 'KA',
+			name: 'ཀ',
 			image: ''
 		}, {
-			name: 'BA',
+			name: 'ཀར',
 			image: ''
 		}, {
-			name: 'GA',
+			name: 'ཀུ་',
 			image: ''
 		}],
 	}]

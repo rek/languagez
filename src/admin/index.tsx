@@ -64,7 +64,6 @@ export default function AdminModule() {
 	);
 }
 
-
 AdminModule.navigationOptions = {title: 'Admin'}
 
 const styles = StyleSheet.create({

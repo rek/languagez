@@ -9,6 +9,8 @@ import {createStackNavigator} from 'react-navigation-stack';
 import DashboardScreen from './dashboard'
 import AdminScreen from './admin'
 import FeedbackScreen from './feedback'
+import GameScreen from './game'
+
 import {colours} from './utils/constants'
 
 import {Reducer as LevelReducer} from './store/levels'
@@ -16,6 +18,7 @@ import {Reducer as FeedbackReducer} from './store/feedback'
 
 const RootStack = createStackNavigator({
   dashboard: {screen: DashboardScreen},
+  game: {screen: GameScreen},
   admin: {screen: AdminScreen},
   feedback: {screen: FeedbackScreen},
 }, {

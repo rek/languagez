@@ -19,18 +19,33 @@ export const Simple = ({title, onPress}) => {
 	)
 }
 
-export default ({style, title, onPress}) =>
-	<TouchableOpacity
-		style={Object.assign({}, styles.default, style)}
-		onPress={onPress}
-	>
-		<Text>{title}</Text>
-	</TouchableOpacity >
+interface CustomProps {
+	style?: any,
+	title?: string,
+	children?: React.ReactElement,
+	onPress: () => void,
+}
+const Custom: React.SFC<CustomProps> = ({
+	style, title, onPress, children
+}) => {
+
+	return (
+		<TouchableOpacity
+			style={[styles.default, style || styles.empty]}
+			onPress={onPress}
+		>
+			{children || <Text>{title}</Text>}
+		</TouchableOpacity >
+	)
+}
 
 const styles = StyleSheet.create({
 	default: {
 		alignItems: 'center',
 		backgroundColor: '#fff',
 		padding: 10
-	}
+	},
+	empty: {}
 })
+
+export default Custom

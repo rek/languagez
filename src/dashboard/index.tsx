@@ -3,15 +3,19 @@ import {StyleSheet, View, Button} from 'react-native';
 
 import Levels from './levels'
 import {colours} from '../utils/constants'
+import {pageStyle} from '../utils/styles'
 
 export default function DashboardModule({
 	navigation,
 }) {
-	return (
+	const handleClick = (id: number) => {
+		navigation.navigate('game', {id})
+	}
 
-		<View style={styles.container}>
+	return (
+		<View style={[styles.container, pageStyle.default]}>
 			<View style={{flex: 4, margin: 10}}>
-				<Levels />
+				<Levels handleClick={handleClick} />
 			</View>
 			<View style={{flex: 2, backgroundColor: colours.second}}>
 				<View style={{
@@ -40,8 +44,6 @@ DashboardModule.navigationOptions = {title: 'Home'}
 
 const styles = StyleSheet.create({
 	container: {
-		flex: 1,
 		flexDirection: 'row',
-		backgroundColor: colours.second,
 	},
 })
