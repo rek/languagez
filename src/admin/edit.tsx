@@ -104,6 +104,14 @@ const EditComponent: React.SFC<Props> = ({navigation}) => {
 	)
 }
 
+const EditItem = ({name, handleEdit}) => {
+	console.log('handleEdit', handleEdit)
+
+	return (
+		<Text>Edit: {name}</Text>
+	)
+}
+
 interface OneItemProps {
 	name: string,
 	handleDelete: () => void,
@@ -112,11 +120,30 @@ const OneItem: React.SFC<OneItemProps> = ({name, handleDelete}) => {
 	// const dispatch = useDispatch();
 	console.log('{name, handleDelete}', {name, handleDelete})
 
+	const [editMode, setMode] = React.useState(false)
+
 	const handleEdit = () => {
-		AlertDelete({deleteAction: () => {
-			console.log('edit!!', name)
-			// dispatch(levelItemEdit())
-		}})
+
+		setMode(true)
+
+		// Alert({
+		// 	title: 'Are you sure you want to delete?',
+		// 	message: '',
+		// 	yesAction: deleteAction,
+		// })
+	}
+
+	if (editMode) {
+		const handleEdit = () => {
+			setMode(false)
+		}
+
+		return (
+			<EditItem
+				name={name}
+				handleEdit={handleEdit}
+			/>
+		)
 	}
 
 	return (
