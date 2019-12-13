@@ -11,7 +11,8 @@ import AdminScreen from './admin'
 import FeedbackScreen from './feedback'
 import {colours} from './utils/constants'
 
-import {LevelReducer} from './store/levels'
+import {Reducer as LevelReducer} from './store/levels'
+import {Reducer as FeedbackReducer} from './store/feedback'
 
 const RootStack = createStackNavigator({
   dashboard: {screen: DashboardScreen},
@@ -30,13 +31,7 @@ const RootStack = createStackNavigator({
   },
 });
 
-const GameReducer = () => {
-  return {
-    // current
-  }
-}
-
-const rootReducer = combineReducers({GameReducer, LevelReducer})
+const rootReducer = combineReducers({FeedbackReducer, LevelReducer})
 const store = createStore(rootReducer, applyMiddleware(thunk))
 
 const AppContainer = createAppContainer(RootStack);

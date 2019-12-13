@@ -1,6 +1,30 @@
 const ADD_LEVEL = 'ADD_LEVEL'
 const ADD_ITEM_TO_LEVEL = 'ADD_ITEM_TO_LEVEL'
 
+//
+// ACTIONS
+//
+interface AddAction {
+	type: typeof ADD_LEVEL;
+	title: string;
+}
+interface AddItemAction {
+	type: typeof ADD_ITEM_TO_LEVEL;
+	level: number;
+	name: string;
+}
+
+export function addLevel(title: string): AddAction {
+	return {type: ADD_LEVEL, title}
+}
+export function addItemToLevel(level: number, name: string): AddItemAction {
+	return {type: ADD_ITEM_TO_LEVEL, level, name}
+}
+
+//
+// TYPES
+//
+
 export type TLevel = {
 	id: number,
 	level: number,
@@ -11,15 +35,8 @@ export type TLevel = {
 	items: item[],
 }
 
-export interface LevelState {
+export interface State {
 	levels: TLevel[]
-}
-
-export function addLevel(title: string): AddAction {
-	return {type: ADD_LEVEL, title}
-}
-export function addItemToLevel(level: number, name: string): AddItemAction {
-	return {type: ADD_ITEM_TO_LEVEL, level, name}
 }
 
 export interface item {
@@ -35,7 +52,7 @@ const levelDefaults = {
 	items: [],
 }
 
-const initialLevelState: LevelState = {
+const initialState: State = {
 	levels: [{
 		id: 1,
 		level: 1,
@@ -56,18 +73,8 @@ const initialLevelState: LevelState = {
 	}]
 }
 
-interface AddAction {
-	type: typeof ADD_LEVEL;
-	title: string;
-}
-interface AddItemAction {
-	type: typeof ADD_ITEM_TO_LEVEL;
-	level: number;
-	name: string;
-}
-
-export const LevelReducer = (
-	state = initialLevelState,
+export const Reducer = (
+	state = initialState,
 	action: AddAction | AddItemAction
 ) => {
 

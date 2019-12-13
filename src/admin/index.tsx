@@ -4,8 +4,9 @@ import {createAppContainer} from 'react-navigation';
 import {createStackNavigator, NavigationStackOptions} from 'react-navigation-stack';
 // import Constants from 'expo-constants';
 
-import Levels, {AddLevel, Feedback} from './levels'
+import Levels, {AddLevel} from './levels'
 import {Menus} from './menu'
+import Feedback from './feedback'
 import {colours} from '../utils/constants'
 import EditComponent from './edit';
 

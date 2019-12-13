@@ -3,16 +3,8 @@ import {StyleSheet, Text, ToastAndroid, TextInput, View, Button, Keyboard} from 
 import {useSelector, useDispatch} from 'react-redux'
 
 import {addLevel} from '../store/levels'
-import Title from '../common/title'
-import {colours} from '../utils/constants'
 
-export const Feedback = () => {
-	return (
-		<View>
-			<Title title='Feedback list goes here...' />
-		</View>
-	)
-}
+import {colours} from '../utils/constants'
 
 export const AddLevel = ({navigation}) => {
 	const [value, updateValue] = React.useState('')
