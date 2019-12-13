@@ -15,6 +15,7 @@ import {colours} from './utils/constants'
 
 import {Reducer as LevelReducer} from './store/levels'
 import {Reducer as FeedbackReducer} from './store/feedback'
+import {Reducer as GameReducer} from './store/game'
 
 const RootStack = createStackNavigator({
   dashboard: {screen: DashboardScreen},
@@ -34,7 +35,7 @@ const RootStack = createStackNavigator({
   },
 });
 
-const rootReducer = combineReducers({FeedbackReducer, LevelReducer})
+const rootReducer = combineReducers({FeedbackReducer, LevelReducer, GameReducer})
 const store = createStore(rootReducer, applyMiddleware(thunk))
 
 const AppContainer = createAppContainer(RootStack);

@@ -5,11 +5,12 @@ export const Active = () => {
 
 }
 
-export const Simple = ({title, onPress}) => {
+export const Simple = ({title, onPress, styles = {}}) => {
 	return (
 		<View style={{
 			height: 40,
 			margin: 3,
+			...styles
 		}}>
 			<Button
 				title={title}
@@ -28,10 +29,15 @@ interface CustomProps {
 const Custom: React.SFC<CustomProps> = ({
 	style, title, onPress, children
 }) => {
+	let stylesToAdd = [styles.empty]
+
+	if (style) {
+		stylesToAdd = Array.isArray(style) ? style : [style]
+	}
 
 	return (
 		<TouchableOpacity
-			style={[styles.default, style || styles.empty]}
+			style={[styles.default, stylesToAdd]}
 			onPress={onPress}
 		>
 			{children || <Text>{title}</Text>}

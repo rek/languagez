@@ -30,6 +30,10 @@ const initialState: State = {
 	feedback: []
 }
 
+//
+// REDUCER
+//
+
 export const Reducer = (
 	state = initialState,
 	action: AddAction

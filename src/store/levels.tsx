@@ -59,7 +59,7 @@ const initialState: State = {
 		locked: false,
 		progress: 0,
 		total: 100,
-		title: 'test',
+		title: 'Level 1',
 		items: [{
 			name: 'ཀ',
 			image: ''
