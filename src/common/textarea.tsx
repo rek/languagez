@@ -11,7 +11,8 @@ const Component: React.SFC<Props> = ({...rest}) => {
 			multiline
 			numberOfLines={8}
 			editable
-			maxLength={40}
+			// maxLength={40}
+			style={{borderWidth: 1, margin: 10}}
 			{...rest} // Inherit any props passed to it; e.g., multiline, numberOfLines below
 		/>
 	)

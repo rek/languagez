@@ -9,7 +9,7 @@ interface AddAction {
 	text: string;
 }
 
-export function addLevel(text: string): AddAction {
+export function addFeedback(text: string): AddAction {
 	return {type: ADD_FEEDBACK, text}
 }
 

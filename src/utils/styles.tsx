@@ -1,5 +1,7 @@
 import {StyleSheet} from 'react-native';
 
+import {colours} from './constants'
+
 const styles = StyleSheet.create({
 	textInput: {
 		height: 40,
@@ -12,3 +14,10 @@ const styles = StyleSheet.create({
 })
 
 export const textInput = styles.textInput
+
+export const pageStyle = StyleSheet.create({
+	default: {
+		flex: 1,
+		backgroundColor: colours.second,
+	},
+})
