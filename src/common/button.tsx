@@ -20,6 +20,15 @@ export const Simple = ({title, onPress, styles = {}}) => {
 	)
 }
 
+export const ShortButton = (props) => {
+	return (
+		<Simple
+			{...props}
+			styles={{...props.styles, width: 100, marginLeft: 10}}
+		/>
+	)
+}
+
 interface CustomProps {
 	style?: any,
 	title?: string,

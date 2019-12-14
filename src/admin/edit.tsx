@@ -13,7 +13,7 @@ import Title from '../common/title'
 import {textInput} from '../utils/styles';
 import {addItemToLevel, levelItemEdit, levelItemDelete, TItem} from '../store/levels';
 import Upload from '../common/upload'
-import {Simple} from '../common/button'
+import {Simple, ShortButton} from '../common/button'
 import AlertDelete from '../common/alertDelete'
 
 interface Props {
@@ -26,6 +26,10 @@ const EditComponent: React.SFC<Props> = ({navigation}) => {
 	const id = navigation.state.params.id
 
 	const dispatch = useDispatch();
+
+	const handleEdit = (itemId) => (name) => {
+		dispatch(levelItemEdit({level: id, itemId, name}))
+	}
 
 	const handleDelete = (name) => () => {
 		AlertDelete({
@@ -86,11 +90,12 @@ const EditComponent: React.SFC<Props> = ({navigation}) => {
 				<FlatList
 					data={level.items}
 					renderItem={({item}) => {
-						const {name} = item as TItem
+						const {name, id} = item as TItem
 						return (
 							<OneItem
 								name={name}
 								handleDelete={handleDelete(name)}
+								handleEdit={handleEdit(id)}
 							/>
 						)
 					}}
@@ -105,25 +110,40 @@ const EditComponent: React.SFC<Props> = ({navigation}) => {
 }
 
 const EditItem = ({name, handleEdit}) => {
-	console.log('handleEdit', handleEdit)
+	const [newTitle, setTitle] = React.useState(name)
+
+	const doEdit = () => {
+		Keyboard.dismiss()
+		handleEdit(newTitle)
+	}
 
 	return (
-		<Text>Edit: {name}</Text>
+		<View style={styles.container}>
+			<TextInput
+				style={textInput}
+				onChangeText={setTitle}
+				value={newTitle}
+			/>
+			<ShortButton
+				title='Save'
+				onPress={doEdit}
+			/>
+		</View>
 	)
 }
 
 interface OneItemProps {
 	name: string,
 	handleDelete: () => void,
+	handleEdit: (newName: string) => void,
 }
-const OneItem: React.SFC<OneItemProps> = ({name, handleDelete}) => {
+const OneItem: React.SFC<OneItemProps> = ({name, handleDelete, handleEdit}) => {
 	// const dispatch = useDispatch();
-	console.log('{name, handleDelete}', {name, handleDelete})
+	// console.log('{name, handleDelete}', {name, handleDelete})
 
 	const [editMode, setMode] = React.useState(false)
 
-	const handleEdit = () => {
-
+	const startEdit = () => {
 		setMode(true)
 
 		// Alert({
@@ -134,14 +154,15 @@ const OneItem: React.SFC<OneItemProps> = ({name, handleDelete}) => {
 	}
 
 	if (editMode) {
-		const handleEdit = () => {
+		const doEdit = (newName) => {
 			setMode(false)
+			handleEdit(newName)
 		}
 
 		return (
 			<EditItem
 				name={name}
-				handleEdit={handleEdit}
+				handleEdit={doEdit}
 			/>
 		)
 	}
@@ -171,7 +192,7 @@ const OneItem: React.SFC<OneItemProps> = ({name, handleDelete}) => {
 			/>
 			<Simple
 				title="Edit"
-				onPress={handleEdit}
+				onPress={startEdit}
 			/>
 			<Simple
 				title="Delete"

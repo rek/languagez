@@ -29,11 +29,11 @@ export function addItemToLevel(level: number, name: string): AddItemAction {
 interface ActionItemEdit {
 	type: typeof LEVEL_ITEM_EDIT;
 	level: number;
+	itemId: string;
 	name: string;
-	name_new: string;
 }
-export function levelItemEdit({level, name, name_new}: ActionItemEdit): ActionItemEdit {
-	return {type: LEVEL_ITEM_EDIT, level, name, name_new}
+export function levelItemEdit({level, itemId, name}: Partial<ActionItemEdit>): ActionItemEdit {
+	return {type: LEVEL_ITEM_EDIT, level, itemId, name}
 }
 
 interface ActionItemDelete {
@@ -65,6 +65,7 @@ export interface State {
 }
 
 export interface TItem {
+	id: string,
 	name: string,
 	image?: string,
 }
@@ -88,12 +89,15 @@ const initialState: State = {
 		total: 100,
 		title: 'Level 1',
 		items: [{
+			id: '1',
 			name: 'ཀ',
 			image: ''
 		}, {
+			id: '2',
 			name: 'ཀར',
 			image: ''
 		}, {
+			id: '3',
 			name: 'ཀུ་',
 			image: ''
 		}],
@@ -119,9 +123,30 @@ export const Reducer = (
 			return {
 				levels: state.levels.map((level) => {
 					return level.id === action.level
+					? {
+						...level,
+						items: level.items.filter((item) => item.name !== action.item)
+					}
+					: level
+				})
+			}
+
+		case LEVEL_ITEM_EDIT:
+			return {
+				levels: state.levels.map((level) => {
+					return level.id === action.level
 						? {
 							...level,
-							items: level.items.filter((item) => item.name !== action.item)
+							items: level.items.map((item) => {
+								if (item.id === action.itemId) {
+									return {
+										...item,
+										name: action.name,
+									}
+								} else {
+									return item
+								}
+							})
 						}
 						: level
 				})
