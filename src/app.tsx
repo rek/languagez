@@ -1,21 +1,22 @@
 import React from 'react';
+import {Text} from 'react-native';
 
-import {createStore, applyMiddleware, combineReducers} from 'redux'
-import thunk from 'redux-thunk'
 import {Provider} from 'react-redux'
 import {createAppContainer} from 'react-navigation';
 import {createStackNavigator} from 'react-navigation-stack';
+
+import {PersistGate} from 'redux-persist/integration/react'
 
 import DashboardScreen from './dashboard'
 import AdminScreen from './admin'
 import FeedbackScreen from './feedback'
 import GameScreen from './game'
 
+import User from './admin/user'
+
 import {colours} from './utils/constants'
 
-import {Reducer as LevelReducer} from './store/levels'
-import {Reducer as FeedbackReducer} from './store/feedback'
-import {Reducer as GameReducer} from './store/game'
+import {store, persistor} from './store'
 
 const RootStack = createStackNavigator({
   dashboard: {screen: DashboardScreen},
@@ -35,15 +36,17 @@ const RootStack = createStackNavigator({
   },
 });
 
-const rootReducer = combineReducers({FeedbackReducer, LevelReducer, GameReducer})
-const store = createStore(rootReducer, applyMiddleware(thunk))
-
 const AppContainer = createAppContainer(RootStack);
+
+const Loading = () => <Text>LOADING</Text>
 
 export default function App() {
   return (
     <Provider store={store}>
-      <AppContainer />
+      <PersistGate loading={<Loading />} persistor={persistor}>
+        <AppContainer />
+        <User />
+      </PersistGate>
     </Provider>
   );
 }

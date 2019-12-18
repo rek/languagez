@@ -1,34 +1,85 @@
 import React from 'react'
-import {StyleSheet, ToastAndroid, TextInput, Text, FlatList, View, Button, Keyboard} from 'react-native';
+import {StyleSheet, ToastAndroid, TextInput, Text, FlatList, View, Keyboard} from 'react-native';
 import {useSelector, useDispatch} from 'react-redux'
-import {colours} from '../utils/constants'
-
+import Modal from "react-native-modal";
 import {
 	NavigationParams,
 	NavigationScreenProp,
 	NavigationState,
 } from 'react-navigation';
 
+import {colours} from '../utils/constants'
 import Title from '../common/title'
-import {textInput} from '../utils/styles';
+import {textInput, modalStyle} from '../utils/styles';
 import {addItemToLevel, levelItemEdit, levelItemDelete, TItem} from '../store/levels';
 import Upload from '../common/upload'
 import {Simple, ShortButton} from '../common/button'
 import AlertDelete from '../common/alertDelete'
+
+const AddItem = ({id, closeModal}) => {
+	const dispatch = useDispatch();
+	const [value, updateValue] = React.useState('')
+
+	const handleAdd = () => {
+		ToastAndroid.showWithGravity('Item added', ToastAndroid.SHORT, ToastAndroid.CENTER);
+		dispatch(addItemToLevel(id, value))
+		updateValue('')
+		Keyboard.dismiss()
+		closeModal()
+	}
+
+	return (
+		<View style={modalStyle.middle}>
+			<Title title='New Item' />
+
+			<TextInput
+				style={textInput}
+				onChangeText={updateValue}
+				placeholder='Name'
+				value={value}
+			/>
+
+			<View style={{
+				width: 100,
+				marginLeft: 10,
+				marginBottom: 50,
+			}}>
+				<Simple
+					title="Add"
+					onPress={handleAdd}
+				/>
+			</View>
+		</View>
+	)
+}
 
 interface Props {
 	navigation: NavigationScreenProp<NavigationState, NavigationParams>;
 }
 
 const EditComponent: React.SFC<Props> = ({navigation}) => {
-	const [value, updateValue] = React.useState('')
-
 	const id = navigation.state.params.id
+	const [visible, showModal] = React.useState(false)
+	const [visibleEdit, showModalEdit] = React.useState<string | boolean>(false)
 
 	const dispatch = useDispatch();
 
-	const handleEdit = (itemId) => (name) => {
+	const handleEdit = (name) => {
+		closeModalEdit()
+		const itemId = visibleEdit as string
+		// console.log('handle edit', {itemId, name})
 		dispatch(levelItemEdit({level: id, itemId, name}))
+	}
+
+	const closeModal = () => showModal(false)
+	const closeModalEdit = () => showModalEdit(false)
+
+	const openEditModal = (id) => {
+		showModalEdit(id)
+	}
+
+	const handleAdd = (id) => {
+		showModal(true)
 	}
 
 	const handleDelete = (name) => () => {
@@ -39,15 +90,12 @@ const EditComponent: React.SFC<Props> = ({navigation}) => {
 		})
 	}
 
-	const handleAdd = () => {
-		ToastAndroid.showWithGravity('Item added', ToastAndroid.SHORT, ToastAndroid.CENTER);
-		dispatch(addItemToLevel(id, value))
-		updateValue('')
-		Keyboard.dismiss()
-	}
-
 	const levels = useSelector(state => state.LevelReducer.levels)
 	const level = levels.find((item) => item.id === id)
+	const getItem = (id) => {
+		const result = level.items.find((item) => item.id === id)
+		return result ? result.name : ''
+	}
 
 	if (!level) {
 		return (
@@ -59,43 +107,47 @@ const EditComponent: React.SFC<Props> = ({navigation}) => {
 
 	return (
 		<View style={styles.container}>
-			<Title title={`Editing level ${id}`} />
-
-			<TextInput
-				style={textInput}
-				onChangeText={updateValue}
-				placeholder='Letter name'
-				value={value}
-			/>
-
 			<View style={{
-				width: 100,
-				marginLeft: 10,
-				marginBottom: 50,
+				alignItems: 'flex-start',
+				flexDirection: 'row',
 			}}>
-				<Button
-					title="Add item"
+				<Title title={`Editing level ${id}`} />
+				<Simple
+					title="Add Item"
 					onPress={handleAdd}
+					styles={{margin: 10}}
 				/>
 			</View>
 
-			<Title title={`All things in level ${id}`} />
+			<Modal isVisible={visible} onBackdropPress={closeModal}>
+				<AddItem id={id} closeModal={closeModal} />
+			</Modal>
+
+			<Modal isVisible={visibleEdit !== false} onBackdropPress={closeModalEdit}>
+				<EditItem
+					name={getItem(visibleEdit)}
+					handleEdit={handleEdit}
+				/>
+			</Modal>
 
 			<View style={{
 				// flex: 1,
 				// alignItems: 'flex-start',
 				// flexDirection: 'column',
 			}}>
-
 				<FlatList
+					style={{
+					}}
 					data={level.items}
 					renderItem={({item}) => {
 						const {name, id} = item as TItem
+
 						return (
 							<OneItem
 								name={name}
 								handleDelete={handleDelete(name)}
-								handleEdit={handleEdit(id)}
+								handleEdit={() => openEditModal(id)}
+								// handleEdit={handleEdit(id)}
 							/>
 						)
 					}}
@@ -118,7 +170,7 @@ const EditItem = ({name, handleEdit}) => {
 	}
 
 	return (
-		<View style={styles.container}>
+		<View style={modalStyle.middle}>
 			<TextInput
 				style={textInput}
 				onChangeText={setTitle}
@@ -141,31 +193,31 @@ const OneItem: React.SFC<OneItemProps> = ({name, handleDelete, handleEdit}) => {
 	// const dispatch = useDispatch();
 	// console.log('{name, handleDelete}', {name, handleDelete})
 
-	const [editMode, setMode] = React.useState(false)
+	// const [editMode, setMode] = React.useState(false)
 
-	const startEdit = () => {
-		setMode(true)
+	// const startEdit = () => {
+	// 	setMode(true)
 
-		// Alert({
-		// 	title: 'Are you sure you want to delete?',
-		// 	message: '',
-		// 	yesAction: deleteAction,
-		// })
-	}
+	// 	// Alert({
+	// 	// 	title: 'Are you sure you want to delete?',
+	// 	// 	message: '',
+	// 	// 	yesAction: deleteAction,
+	// 	// })
+	// }
 
-	if (editMode) {
-		const doEdit = (newName) => {
-			setMode(false)
-			handleEdit(newName)
-		}
+	// if (editMode) {
+	// 	const doEdit = (newName) => {
+	// 		setMode(false)
+	// 		handleEdit(newName)
+	// 	}
 
-		return (
-			<EditItem
-				name={name}
-				handleEdit={doEdit}
-			/>
-		)
-	}
+	// 	return (
+	// 		<EditItem
+	// 			name={name}
+	// 			handleEdit={doEdit}
+	// 		/>
+	// 	)
+	// }
 
 	return (
 		<View style={{
@@ -192,7 +244,7 @@ const OneItem: React.SFC<OneItemProps> = ({name, handleDelete, handleEdit}) => {
 			/>
 			<Simple
 				title="Edit"
-				onPress={startEdit}
+				onPress={handleEdit}
 			/>
 			<Simple
 				title="Delete"
