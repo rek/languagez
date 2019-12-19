@@ -21,7 +21,6 @@ const Component: React.SFC<Props> = ({}) => {
 	const dispatch = useDispatch()
 
 	if (!user) {
-		console.log('no user, creating!')
 		dispatch(addUser(uuid()))
 	}
 

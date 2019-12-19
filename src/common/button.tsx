@@ -29,13 +29,30 @@ export const ShortButton = (props) => {
 	)
 }
 
+export const Clickable: React.SFC<{
+	children: React.ReactElement,
+	onPress: () => void,
+	style?: any
+}> = ({
+	onPress, children, style
+}) => {
+	return (
+		<TouchableOpacity
+			style={style}
+			onPress={onPress}
+		>
+			{children}
+		</TouchableOpacity >
+	)
+}
+
 interface CustomProps {
 	style?: any,
 	title?: string,
 	children?: React.ReactElement,
 	onPress: () => void,
 }
-const Custom: React.SFC<CustomProps> = ({
+export const Custom: React.SFC<CustomProps> = ({
 	style, title, onPress, children
 }) => {
 	let stylesToAdd = [styles.empty]
@@ -45,12 +62,12 @@ const Custom: React.SFC<CustomProps> = ({
 	}
 
 	return (
-		<TouchableOpacity
+		<Clickable
 			style={[styles.default, stylesToAdd]}
 			onPress={onPress}
 		>
 			{children || <Text>{title}</Text>}
-		</TouchableOpacity >
+		</Clickable>
 	)
 }
 

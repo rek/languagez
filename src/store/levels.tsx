@@ -1,6 +1,8 @@
 import {AppState} from './index';
 import {useSelector} from 'react-redux';
 
+import level1 from './fixtures/level1'
+
 const ADD_LEVEL = 'ADD_LEVEL'
 const DELETE_LEVEL = 'DELETE_LEVEL'
 
@@ -14,6 +16,36 @@ const LEVEL_ITEM_EDIT = 'LEVEL_ITEM_EDIT'
 
 export function get() {
 	return useSelector((state: AppState) => state.LevelReducer.levels)
+}
+
+export function getLevel(id: number) {
+	return get().find((level) => level.id === id)
+}
+
+const isInList = (list, id) => {
+	return list.filter((item) => item.id === id).length > 0
+}
+
+export function getLevelItem(level, exclusions = [], results = [], amount = 3) {
+	if (results.length === amount) {
+		return results
+	}
+
+	// get an item not in the list and not excluded already
+	const found = level.items.find((item) => {
+		if (!exclusions.includes(item.id)) {
+			if (!isInList(results, item.id)) {
+				return true
+			}
+		}
+	})
+
+	if (found) {
+		results.push(found)
+		return getLevelItem(level, exclusions, results, amount)
+	}
+
+	return results
 }
 
 //
@@ -62,7 +94,7 @@ export function levelItemDelete(level: number, item: string): ActionItemDelete {
 
 export type TLevel = {
 	id: number,
-	level: number,
+	// level: number,
 	locked: boolean,
 	progress: number,
 	total: number,
@@ -82,7 +114,7 @@ export interface TItem {
 }
 
 const levelDefaults = {
-	level: 1,
+	// level: 1,
 	locked: false,
 	created: new Date(),
 	progress: 0,
@@ -91,28 +123,7 @@ const levelDefaults = {
 }
 
 const initialState: State = {
-	levels: [{
-		id: 1,
-		level: 1,
-		locked: false,
-		created: '0',
-		progress: 1,
-		total: 100,
-		title: 'Level 1',
-		items: [{
-			id: '1',
-			name: 'ཀ',
-			image: ''
-		}, {
-			id: '2',
-			name: 'ཀར',
-			image: ''
-		}, {
-			id: '3',
-			name: 'ཀུ་',
-			image: ''
-		}],
-	}]
+	levels: [level1]
 }
 
 export const Reducer = (

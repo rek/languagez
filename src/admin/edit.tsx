@@ -1,5 +1,5 @@
 import React from 'react'
-import {StyleSheet, ToastAndroid, TextInput, Text, FlatList, View, Keyboard} from 'react-native';
+import {StyleSheet, TextInput, Text, FlatList, View, Keyboard} from 'react-native';
 import {useSelector, useDispatch} from 'react-redux'
 import Modal from "react-native-modal";
 import {
@@ -9,7 +9,9 @@ import {
 } from 'react-navigation';
 
 import {colours} from '../utils/constants'
+import {message} from '../utils/message'
 import Title from '../common/title'
+import Image from '../common/image'
 import {textInput, modalStyle} from '../utils/styles';
 import {addItemToLevel, levelItemEdit, levelItemDelete, TItem} from '../store/levels';
 import Upload from '../common/upload'
@@ -21,7 +23,7 @@ const AddItem = ({id, closeModal}) => {
 	const [value, updateValue] = React.useState('')
 
 	const handleAdd = () => {
-		ToastAndroid.showWithGravity('Item added', ToastAndroid.SHORT, ToastAndroid.CENTER);
+		message('Item added');
 		dispatch(addItemToLevel(id, value))
 		updateValue('')
 		Keyboard.dismiss()
@@ -140,11 +142,13 @@ const EditComponent: React.SFC<Props> = ({navigation}) => {
 					}}
 					data={level.items}
 					renderItem={({item}) => {
-						const {name, id} = item as TItem
+						// console.log('item', item)
+						const {name, id, image} = item as TItem
 
 						return (
 							<OneItem
 								name={name}
+								image={image}
 								handleDelete={handleDelete(name)}
 								handleEdit={() => openEditModal(id)}
 								// handleEdit={handleEdit(id)}
@@ -186,10 +190,11 @@ const EditItem = ({name, handleEdit}) => {
 
 interface OneItemProps {
 	name: string,
+	image?: string,
 	handleDelete: () => void,
 	handleEdit: (newName: string) => void,
 }
-const OneItem: React.SFC<OneItemProps> = ({name, handleDelete, handleEdit}) => {
+const OneItem: React.SFC<OneItemProps> = ({name, image, handleDelete, handleEdit}) => {
 	// const dispatch = useDispatch();
 	// console.log('{name, handleDelete}', {name, handleDelete})
 
@@ -219,6 +224,32 @@ const OneItem: React.SFC<OneItemProps> = ({name, handleDelete, handleEdit}) => {
 	// 	)
 	// }
 
+	const handleUpload = (image) => {
+		console.log('image', image)
+	}
+
+	const ImageOrUpload = ({image}) => {
+		if (image) {
+			return (
+				<Image base64={image} />
+			)
+		}
+
+		return (
+			<Upload
+				handleUpload={handleUpload}
+				renderUploadButton={({onPress}) => {
+					return (
+						<Simple
+							title="Upload"
+							onPress={onPress}
+						/>
+					)
+				}}
+			/>
+		)
+	}
+
 	return (
 		<View style={{
 			flex: 1,
@@ -232,16 +263,8 @@ const OneItem: React.SFC<OneItemProps> = ({name, handleDelete, handleEdit}) => {
 		}}>
 			<Text style={{flex: 3}}>{name}</Text>
 
-			<Upload
-				renderUploadButton={({onPress}) => {
-					return (
-						<Simple
-							title="Upload"
-							onPress={onPress}
-						/>
-					)
-				}}
-			/>
+			<ImageOrUpload image={image} />
+
 			<Simple
 				title="Edit"
 				onPress={handleEdit}

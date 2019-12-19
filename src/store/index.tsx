@@ -35,16 +35,16 @@ const rootReducer = (state, action) => {
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)
 
-// const composeEnhancers = (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-// const enhancer = composeEnhancers(
-//   applyMiddleware(thunk),
-// )
-// const store = createStore(persistedReducer, enhancer);
-
-const store = createStore(
-	persistedReducer,
-	applyMiddleware(thunk),
+const composeEnhancers = (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+const enhancer = composeEnhancers(
+  applyMiddleware(thunk),
 )
+const store = createStore(persistedReducer, enhancer);
+
+// const store = createStore(
+// 	persistedReducer,
+// 	applyMiddleware(thunk),
+// )
 
 let persistor = persistStore(store)
 

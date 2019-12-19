@@ -24,22 +24,16 @@ const ListLevels: React.SFC<Props> = ({handleClick}) => {
 	// const levels = get()
 	const [user] = useUser()
 	const levels = getProgress(user, get())
-	console.log('levels', levels)
+	// console.log('levels', levels)
 
 	const onPress = (id) => () => handleClick(id)
 
-	let display = []
-
-	for (const id in levels) {
-		const level = levels[id]
-		display.push(
-			<OneLevel key={level.id} onPress={onPress(level.id)} name={`${level.title} - ${level.progress}/${level.total}`} />
-		)
-	}
-
 	return (
 		<View>
-			{display}
+			{Object.keys(levels).map((id) => {
+				const level = levels[id]
+				return <OneLevel key={level.id} onPress={onPress(level.id)} name={`${level.title} - ${level.progress}`} />
+			})}
 			{/* {levels.map((level) => <OneLevel key={level.id} onPress={onPress(level.id)} name={`${level.title} - ${level.progress}/${level.total}`} />)} */}
 		</View>
 	)

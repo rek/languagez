@@ -7,7 +7,7 @@ import {
 	// Share,
 	StatusBar,
 	StyleSheet,
-	Text,
+	// Text,
 	View
 } from "react-native";
 // import { Constants } from "expo";
@@ -27,7 +27,7 @@ interface Props {
 const Component: React.SFC<Props> = ({
 	handleUpload,
 	renderUploadButton,
-	image,
+	// image,
 }) => {
 	const [internalImage, setImage] = useState(null);
 	const [uploading, setUploading] = useState(false);
@@ -58,6 +58,7 @@ const Component: React.SFC<Props> = ({
 				// console.log('Setting image:', pickerResult)
 
 				setImage(pickerResult.base64);
+				handleUpload(pickerResult.base64)
 
 				// uploadResponse = await uploadImageAsync(pickerResult.uri);
 				// uploadResult = await uploadResponse.json();
@@ -126,7 +127,7 @@ const Component: React.SFC<Props> = ({
 			<StatusBar barStyle="default" />
 
 			{/* <Button onPress={takePhoto} title="Take a photo" /> */}
-			{!internalImage && <UploadButton />}
+			<UploadButton />
 
 			{internalImage && (
 				<Image source={{uri: `data:image/jpeg;base64,${internalImage}`}} style={styles.maybeRenderImage} />

@@ -1,6 +1,8 @@
 import {AppState} from './index';
 import {useSelector} from 'react-redux';
 
+import {getLevelItem} from './levels'
+
 const ADD_RESULT = 'ADD_RESULT'
 
 //
@@ -13,10 +15,44 @@ export function getUserHistory(user: string) {
 	return history.filter((item) => item.user === user)
 }
 
-export function getHistoryForLevel(history, level) {
+export function getHistoryForLevel(history, id) {
 	return history.filter((item) => {
-		return item.level === level
+		return item.id === id
 	})
+}
+
+export function getUncompleteForLevel(level) {
+	const levelHistory = getHistoryForLevel(get(), level.id)
+
+	const hasHistory = (id) => {
+		return levelHistory.filter((item) => item.id === id).length > 0
+	}
+
+	return level.items.filter((item) => {
+		return !hasHistory(item.id)
+	})
+}
+
+//
+export function getQuestionForLevel(level) {
+	const itemsToQuestion = getUncompleteForLevel(level)
+
+	if (itemsToQuestion.length > 0) {
+		return {
+			question: {
+				id: itemsToQuestion[0].id,
+				text: itemsToQuestion[0].name,
+			},
+			options: getLevelItem(level, [itemsToQuestion[0].id])
+		}
+
+	}
+
+	return false
+}
+
+export function getQuestionForItem(item) {
+
 }
 
 export function getProgress(user: string, levels) {
@@ -26,13 +62,13 @@ export function getProgress(user: string, levels) {
 
 	levels.forEach((level) => {
 		const lh = getHistoryForLevel(history, level)
-		console.log('level', level)
-		console.log('lh', lh)
-		results[level.level] = {
+		console.log('level', level.id)
+		// console.log('lh', lh)
+		let progress = 0
+		results[level.id] = {
 			id: level.id,
 			title: level.title,
-			progress: 0,
-			total: level.total,
+			progress: `${progress}/${level.items.length}`,
 		}
 	})
 

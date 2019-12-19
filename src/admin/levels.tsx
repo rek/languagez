@@ -1,10 +1,11 @@
 import React from 'react';
-import {StyleSheet, Text, ToastAndroid, TextInput, View, Button, Keyboard} from 'react-native';
+import {StyleSheet, Text, TextInput, View, Button, Keyboard} from 'react-native';
 import {useSelector, useDispatch} from 'react-redux'
 
 import {addLevel} from '../store/levels'
 
 import {textInput} from '../utils/styles';
+import {message} from '../utils/message';
 import {colours} from '../utils/constants'
 import {Simple} from '../common/button'
 
@@ -15,11 +16,11 @@ export const AddLevel = ({navigation}) => {
 
 	const handleAdd = () => {
 		if (value === '') {
-			ToastAndroid.showWithGravity('Please enter in a level name', ToastAndroid.SHORT, ToastAndroid.CENTER);
+			message('Please enter in a level name')
 			return
 		}
 
-		ToastAndroid.show('Level added', ToastAndroid.SHORT);
+		message('Level added')
 
 		dispatch(addLevel(value))
 		updateValue('')
