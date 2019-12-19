@@ -1,5 +1,17 @@
+import {AppState} from './index';
+import {useSelector} from 'react-redux';
 
 const ADD_USER = 'ADD_USER'
+
+//
+// VIEWS
+//
+
+export function useUser() {
+	const userId = useSelector((state: AppState) => state.UserReducer.user)
+
+	return [userId]
+}
 
 interface AddUser {
 	type: typeof ADD_USER;

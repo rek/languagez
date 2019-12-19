@@ -9,6 +9,7 @@ import {Menus} from './menu'
 import Feedback from './feedback'
 import {colours} from '../utils/constants'
 import EditComponent from './edit';
+import Misc from './misc';
 
 const WrapPageWithMenu = (Page, title: string, options: any = {}) => {
 	const Wrapped = ({navigation}) => {
@@ -34,6 +35,7 @@ const RootStack = createStackNavigator({
 	show: {screen: WrapPageWithMenu(Levels, 'All levels')},
 	add: {screen: WrapPageWithMenu(AddLevel, 'Add a new level')},
 	feedback: {screen: WrapPageWithMenu(Feedback, 'Feedback')},
+	misc: {screen: WrapPageWithMenu(Misc, 'Misc')},
 	edit: {
 		screen: EditComponent,
 		navigationOptions: ({navigation}) => ({

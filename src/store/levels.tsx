@@ -1,9 +1,20 @@
+import {AppState} from './index';
+import {useSelector} from 'react-redux';
+
 const ADD_LEVEL = 'ADD_LEVEL'
 const DELETE_LEVEL = 'DELETE_LEVEL'
 
 const LEVEL_ITEM_DELETE = 'LEVEL_ITEM_DELETE'
 const LEVEL_ITEM_ADD = 'LEVEL_ITEM_ADD'
 const LEVEL_ITEM_EDIT = 'LEVEL_ITEM_EDIT'
+
+//
+// VIEWS
+//
+
+export function get() {
+	return useSelector((state: AppState) => state.LevelReducer.levels)
+}
 
 //
 // ACTIONS

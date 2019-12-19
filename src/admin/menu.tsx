@@ -18,6 +18,7 @@ export const Menus = ({navigation}) => {
 			<ActiveButton title='Show levels' id='show' />
 			<ActiveButton title='Add level' id='add' />
 			<ActiveButton title='Feedback' id='feedback' />
+			<ActiveButton title='Misc' id='misc' />
 		</View>
 	)
 }

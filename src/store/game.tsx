@@ -1,4 +1,47 @@
+import {AppState} from './index';
+import {useSelector} from 'react-redux';
+
 const ADD_RESULT = 'ADD_RESULT'
+
+//
+// VIEWS
+//
+
+export function getUserHistory(user: string) {
+	const history = get()
+
+	return history.filter((item) => item.user === user)
+}
+
+export function getHistoryForLevel(history, level) {
+	return history.filter((item) => {
+		return item.level === level
+	})
+}
+
+export function getProgress(user: string, levels) {
+	const history = getUserHistory(user)
+
+	const results = {}
+
+	levels.forEach((level) => {
+		const lh = getHistoryForLevel(history, level)
+		console.log('level', level)
+		console.log('lh', lh)
+		results[level.level] = {
+			id: level.id,
+			title: level.title,
+			progress: 0,
+			total: level.total,
+		}
+	})
+
+	return results
+}
+
+export function get() {
+	return useSelector((state: AppState) => state.GameReducer.history)
+}
 
 //
 // ACTIONS
@@ -22,15 +65,20 @@ export function addResult(user: string, level: string, item: string, pass: boole
 
 export interface TTest {
 	id: number, // object id
-	// date: string, // time of attempt
 	item: string, // letter id
 	pass: boolean, // did they guess it right
+
+	created?: string, // time of attempt
 }
 
 export interface TUserHistory {
 	id: number, // object id
 	user: number, // user id
 	level: string, // level id
+
+	state: string, // done?
+	progress: number, // percent completed
+
 	history: TTest[]
 }
 
