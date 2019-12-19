@@ -17,16 +17,24 @@ export function getUserHistory(user: string) {
 }
 
 export function getHistoryForLevel(history, id) {
-	return history.filter((item) => {
-		return item.id === id
+	return history.find((item) => {
+		return item.level === id
 	})
 }
 
 export function getUncompleteForLevel(level) {
 	const levelHistory = getHistoryForLevel(get(), level.id)
+	// console.log('levelHistory', levelHistory)
+
+	if (!levelHistory || !levelHistory.history) {
+		// console.log('NO history for level:', level.id)
+		return level.items
+	}
 
 	const hasHistory = (id) => {
-		return levelHistory.filter((item) => item.id === id).length > 0
+		const itemHistory = levelHistory.history.filter((item) => item.item === id)
+		// console.log('itemHistory', itemHistory)
+		return itemHistory.length > 0
 	}
 
 	return level.items.filter((item) => {
@@ -37,6 +45,7 @@ export function getUncompleteForLevel(level) {
 //
 export function getQuestionForLevel(level) {
 	const itemsToQuestion = getUncompleteForLevel(level)
+	// console.log('itemsToQuestion', itemsToQuestion.map((item) => item.id))
 
 	if (itemsToQuestion.length > 0) {
 		const current = itemsToQuestion[0]
@@ -92,11 +101,11 @@ interface AddResult {
 	user: string;
 	level: number;
 	item: string;
-	pass: boolean;
+	attempts: string[];
 }
 
-export function addResult({user, level, item, pass}: Partial<AddResult>): AddResult {
-	return {type: ADD_RESULT, user, level, item, pass}
+export function addResult({user, level, item, attempts}: Partial<AddResult>): AddResult {
+	return {type: ADD_RESULT, user, level, item, attempts}
 }
 
 //
@@ -106,7 +115,7 @@ export function addResult({user, level, item, pass}: Partial<AddResult>): AddRes
 export interface TTest {
 	id: number, // object id
 	item: string, // letter id
-	pass: boolean, // did they guess it right
+	attempts: string[], // how many attempts did it take (and what were the wrong guesses)
 
 	created?: string, // time of attempt
 }
@@ -164,9 +173,11 @@ export const Reducer = (
 	action: AddResult | {type: 'default'}
 ) => {
 
+
 	switch (action.type) {
 		case ADD_RESULT:
 			const workingHistory = ensureHistoryItem(state.history, action.level, action.user)
+			// console.log('action', action)
 
 			return {
 				history: workingHistory.map((item) => {
@@ -176,7 +187,7 @@ export const Reducer = (
 							history: [...item.history, {
 								id: uuid(),
 								item: action.item,
-								pass: action.pass,
+								attempts: action.attempts,
 
 								created: ''
 							}]

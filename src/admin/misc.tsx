@@ -39,7 +39,7 @@ const MiscComponent: React.SFC<Props> = ({}) => {
 
 						{item.history.map((historyItem) => {
 							return (
-								<Text>{historyItem.item} - {historyItem.pass}</Text>
+								<Text key={historyItem.id}>{historyItem.item} - {historyItem.attempts.length}</Text>
 							)
 						})}
 					</View>

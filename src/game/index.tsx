@@ -8,6 +8,7 @@ import {addResult, getQuestionForLevel} from '../store/game'
 
 import {pageStyle} from '../utils/styles'
 import Image from '../common/image'
+import Title from '../common/title'
 import {Clickable as CustomButton} from '../common/button'
 
 import {tickImage, crossImage} from '../store/fixtures/misc'
@@ -17,18 +18,49 @@ function GameModule({navigation}) {
 	// console.log('id', id)
 	const level = getLevel(id)
 	// console.log('level', level)
-	const [user] = useUser()
-	const dispatch = useDispatch()
+
+	const [questionSet, setSetId] = React.useState(0)
+
 	const itemsToQuestion = getQuestionForLevel(level)
 	// console.log('itemsToQuestion', itemsToQuestion)
 
+	const handleDone = () => {
+		// console.log('outa here!')
+		// navigation.navigate('game', {id})
+		setSetId(questionSet + 1)
+	}
+
+	return (
+		<Game id={id} key={questionSet} itemsToQuestion={itemsToQuestion} handleDone={handleDone} />
+	)
+}
+
+GameModule.navigationOptions = {title: 'Game'}
+
+const Game: React.SFC<{itemsToQuestion: any, id: number, handleDone: any}> = ({
+	id,
+	itemsToQuestion,
+	handleDone
+}) => {
+	const [attempts, addAttempt] = React.useState([])
+	const dispatch = useDispatch()
+	const [user] = useUser()
+
 	if (!itemsToQuestion) {
-		return () =>
-			<Text>Level done</Text>
+		return (
+			<View style={pageStyle.default}>
+				<Title title='Level done' />
+			</View>
+		)
 	}
 
 	const handleSelect = (item) => {
-		dispatch(addResult(user, id, item.id, item.correct || false))
+		if (item.correct) {
+			dispatch(addResult({user, level: id, item: item.id, attempts}))
+			handleDone()
+		} else {
+			addAttempt([...attempts, item.id])
+		}
 	}
 
 	return (
@@ -46,8 +78,6 @@ function GameModule({navigation}) {
 		</View>
 	)
 }
-
-GameModule.navigationOptions = {title: 'Game'}
 
 const Option = ({item, handleSelect}) => {
 	const [passed, setPassed] = React.useState()
