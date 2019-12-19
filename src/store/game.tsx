@@ -1,7 +1,8 @@
 import {AppState} from './index';
 import {useSelector} from 'react-redux';
+import uuid from 'uuid/v4'
 
-import {getLevelItem} from './levels'
+import {getOptionsForItem} from './levels'
 
 const ADD_RESULT = 'ADD_RESULT'
 
@@ -38,12 +39,15 @@ export function getQuestionForLevel(level) {
 	const itemsToQuestion = getUncompleteForLevel(level)
 
 	if (itemsToQuestion.length > 0) {
+		const current = itemsToQuestion[0]
+		const options = getOptionsForItem(level, [current.id], [{correct: true, ...current}])
+
 		return {
 			question: {
-				id: itemsToQuestion[0].id,
-				text: itemsToQuestion[0].name,
+				id: current.id,
+				text: current.name,
 			},
-			options: getLevelItem(level, [itemsToQuestion[0].id])
+			options,
 		}
 
 	}
@@ -62,7 +66,7 @@ export function getProgress(user: string, levels) {
 
 	levels.forEach((level) => {
 		const lh = getHistoryForLevel(history, level)
-		console.log('level', level.id)
+		// console.log('level', level.id)
 		// console.log('lh', lh)
 		let progress = 0
 		results[level.id] = {
@@ -76,7 +80,7 @@ export function getProgress(user: string, levels) {
 }
 
 export function get() {
-	return useSelector((state: AppState) => state.GameReducer.history)
+	return useSelector((state: AppState) => state.GameReducer.history) as TUserHistory[]
 }
 
 //
@@ -86,12 +90,12 @@ export function get() {
 interface AddResult {
 	type: typeof ADD_RESULT;
 	user: string;
-	level: string;
+	level: number;
 	item: string;
 	pass: boolean;
 }
 
-export function addResult(user: string, level: string, item: string, pass: boolean): AddResult {
+export function addResult({user, level, item, pass}: AddResult): AddResult {
 	return {type: ADD_RESULT, user, level, item, pass}
 }
 
@@ -109,8 +113,8 @@ export interface TTest {
 
 export interface TUserHistory {
 	id: number, // object id
-	user: number, // user id
-	level: string, // level id
+	user: string, // user id
+	level: number, // level id
 
 	state: string, // done?
 	progress: number, // percent completed
@@ -130,19 +134,55 @@ const initialState: State = {
 	history: []
 }
 
+interface HistorySearch {
+	history: TUserHistory[], level: number, user: string
+}
+const hasHistoryItem = (history: TUserHistory[], level: number, user: string) => {
+	return history.find((item) => item.level === level && item.user === user)
+}
+
+const ensureHistoryItem = (history, level, user) => {
+	const existing = hasHistoryItem(history, level, user)
+
+	if (existing) {
+		return history
+	}
+
+	return [...history, {
+		id: uuid(),
+		user,
+		level,
+
+		state: '',
+		progress: 0,
+		history: []
+	}]
+}
+
 export const Reducer = (
 	state = initialState,
 	action: AddResult
 ) => {
 
 	switch (action.type) {
-		// case ADD_FEEDBACK:
-		// 	return {
-		// 		feedback: [{
-		// 			id: state.feedback.length + 1,
-		// 			text: action.text,
-		// 		}, ...state.feedback]
-		// 	};
+		case ADD_RESULT:
+			const workingHistory = ensureHistoryItem(state.history, action.level, action.user)
+
+			return {
+				history: workingHistory.map((item) => {
+					return item.level === action.level && item.user === action.user
+						? {
+							...item,
+							history: [...item.history, {
+								id: uuid(),
+								item: action.item,
+								pass: action.pass,
+
+								created: ''
+							}]
+						} : item
+				})
+			};
 	}
 
 	return state

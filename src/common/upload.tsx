@@ -32,7 +32,7 @@ const Component: React.SFC<Props> = ({
 	children,
 	// image,
 }) => {
-	const [internalImage, setImage] = useState(null);
+	// const [internalImage, setImage] = useState(null);
 	const [uploading, setUploading] = useState(false);
 
 	// const share = useCallback(() => {
@@ -60,7 +60,7 @@ const Component: React.SFC<Props> = ({
 				// console.log('Image keys:', Object.keys(pickerResult))
 				// console.log('Setting image:', pickerResult)
 
-				setImage(pickerResult.base64);
+				// setImage(pickerResult.base64);
 				handleUpload(pickerResult.base64)
 
 				// uploadResponse = await uploadImageAsync(pickerResult.uri);
@@ -70,7 +70,7 @@ const Component: React.SFC<Props> = ({
 		} catch (e) {
 			// console.log({ uploadResponse });
 			// console.log({ uploadResult });
-			// console.log({ e });
+			console.log({e});
 			alert("Upload failed, sorry :(");
 		} finally {
 			setUploading(false);

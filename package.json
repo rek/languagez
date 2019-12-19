@@ -5,6 +5,7 @@
   "version": "0.1.0",
   "scripts": {
     "start": "expo start",
+    "test": "echo 'test!'",
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",

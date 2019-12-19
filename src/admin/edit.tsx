@@ -66,18 +66,16 @@ const EditComponent: React.SFC<Props> = ({navigation}) => {
 
 	const dispatch = useDispatch();
 
-	const handleEdit = (name) => {
+	const handleEdit = (name: string) => {
 		closeModalEdit()
 		const itemId = visibleEdit as string
 		console.log('handle edit', {itemId, name})
 		dispatch(levelItemEdit({level: id, itemId, payload: {name}}))
 	}
 
-	const handleUploadImage = (image) => {
-		closeModalEdit()
-		const itemId = visibleEdit as string
-		// console.log('handle edit', {itemId, name})
-		dispatch(levelItemEdit({level: id, itemId, payload: {name}}))
+	const handleUploadImage = (itemId) => (image: string) => {
+		// console.log('handleUploadImage', {itemId})
+		dispatch(levelItemEdit({level: id, itemId, payload: {image}}))
 	}
 
 	const closeModal = () => showModal(false)
@@ -156,7 +154,7 @@ const EditComponent: React.SFC<Props> = ({navigation}) => {
 							<OneItem
 								name={name}
 								image={image}
-								handleUpload={handleUploadImage}
+								handleUpload={handleUploadImage(id)}
 								handleDelete={handleDelete(name)}
 								handleEdit={() => openEditModal(id)}
 							// handleEdit={handleEdit(id)}

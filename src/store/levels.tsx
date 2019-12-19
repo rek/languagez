@@ -27,7 +27,7 @@ const isInList = (list, id) => {
 	return list.filter((item) => item.id === id).length > 0
 }
 
-export function getLevelItem(level, exclusions = [], results = [], amount = 3) {
+export function getOptionsForItem(level, exclusions = [], results = [], amount = 3) {
 	if (results.length === amount) {
 		return shuffle(results)
 	}
@@ -43,7 +43,7 @@ export function getLevelItem(level, exclusions = [], results = [], amount = 3) {
 
 	if (found) {
 		results.push(found)
-		return getLevelItem(level, exclusions, results, amount)
+		return getOptionsForItem(level, exclusions, results, amount)
 	}
 
 	return results
