@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, Text, TextInput, View, Button, Keyboard} from 'react-native';
+import {StyleSheet, Text, TextInput, View, Keyboard} from 'react-native';
 import {useSelector, useDispatch} from 'react-redux'
 
 import {addLevel} from '../store/levels'
@@ -7,7 +7,7 @@ import {addLevel} from '../store/levels'
 import {textInput} from '../utils/styles';
 import {message} from '../utils/message';
 import {colours} from '../utils/constants'
-import {Simple} from '../common/button'
+import {Simple, Custom} from '../common/button'
 
 export const AddLevel = ({navigation}) => {
 	const [value, updateValue] = React.useState('')
@@ -56,7 +56,7 @@ const OneLevel = ({name, handleEdit}) =>
 			<Text>{name}</Text>
 		</View>
 		<View style={{flex: 1}}>
-			<Button
+			<Custom
 				title="Edit"
 				onPress={handleEdit}
 			/>

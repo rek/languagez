@@ -1,8 +1,8 @@
 export const colours = {
-	main: '#BC9CB0', // grey
-	second: '#C7D9B7', // light green
-	third: '#FFFFFF', // white
-	fourth: '#C5D5EA', // light blue
-	active: '#519E8A', // dark green
-	title: '#476A6F', // mid green
+	main: '#E97910', // main heading
+	second: '#64AB71', // background
+	third: '#FFFFFF', // text
+	fourth: '#240D70', // buttons
+	active: '#F5E202', // admin menu
+	title: '#DB2014', // title text
 }

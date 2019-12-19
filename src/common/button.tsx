@@ -1,6 +1,8 @@
 import React from 'react';
 import {StyleSheet, View, Button, Text, TouchableOpacity} from 'react-native';
 
+import {colours} from '../utils/constants'
+
 export const Active = () => {
 
 }
@@ -10,7 +12,7 @@ export const Simple = ({title, onPress, styles = {}}) => {
 		<View style={{
 			height: 40,
 			margin: 3,
-			...styles
+			...styles,
 		}}>
 			<Button
 				title={title}
@@ -48,12 +50,13 @@ export const Clickable: React.SFC<{
 
 interface CustomProps {
 	style?: any,
+	extras?: any,
 	title?: string,
 	children?: React.ReactElement,
 	onPress: () => void,
 }
 export const Custom: React.SFC<CustomProps> = ({
-	style, title, onPress, children
+	title, onPress, children, style, extras,
 }) => {
 	let stylesToAdd = [styles.empty]
 
@@ -61,12 +64,16 @@ export const Custom: React.SFC<CustomProps> = ({
 		stylesToAdd = Array.isArray(style) ? style : [style]
 	}
 
+	if (extras) {
+		stylesToAdd.push(extras)
+	}
+
 	return (
 		<Clickable
 			style={[styles.default, stylesToAdd]}
 			onPress={onPress}
 		>
-			{children || <Text>{title}</Text>}
+			{children || <Text style={styles.emptyText}>{title}</Text>}
 		</Clickable>
 	)
 }
@@ -77,7 +84,13 @@ const styles = StyleSheet.create({
 		backgroundColor: '#fff',
 		padding: 10
 	},
-	empty: {}
+	empty: {
+		backgroundColor: colours.fourth,
+		height: 40,
+	},
+	emptyText: {
+		color: colours.third
+	},
 })
 
 export default Custom

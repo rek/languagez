@@ -25,7 +25,7 @@ export const pageStyle = StyleSheet.create({
 
 export const modalStyle = StyleSheet.create({
 	middle: {
-		backgroundColor: 'white',
+		backgroundColor: colours.active,
 		padding: 12,
 		justifyContent: 'center',
 		// alignItems: 'center',

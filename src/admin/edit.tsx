@@ -15,7 +15,7 @@ import Image from '../common/image'
 import {textInput, modalStyle} from '../utils/styles';
 import {addItemToLevel, levelItemEdit, levelItemDelete, TItem} from '../store/levels';
 import Upload from '../common/upload'
-import {Simple, ShortButton} from '../common/button'
+import {Custom, Simple, ShortButton} from '../common/button'
 import AlertDelete from '../common/alertDelete'
 
 const AddItem = ({id, closeModal}) => {
@@ -46,7 +46,7 @@ const AddItem = ({id, closeModal}) => {
 				marginLeft: 10,
 				marginBottom: 50,
 			}}>
-				<Simple
+				<Custom
 					title="Add"
 					onPress={handleAdd}
 				/>
@@ -69,8 +69,15 @@ const EditComponent: React.SFC<Props> = ({navigation}) => {
 	const handleEdit = (name) => {
 		closeModalEdit()
 		const itemId = visibleEdit as string
+		console.log('handle edit', {itemId, name})
+		dispatch(levelItemEdit({level: id, itemId, payload: {name}}))
+	}
+
+	const handleUploadImage = (image) => {
+		closeModalEdit()
+		const itemId = visibleEdit as string
 		// console.log('handle edit', {itemId, name})
-		dispatch(levelItemEdit({level: id, itemId, name}))
+		dispatch(levelItemEdit({level: id, itemId, payload: {name}}))
 	}
 
 	const closeModal = () => showModal(false)
@@ -80,7 +87,7 @@ const EditComponent: React.SFC<Props> = ({navigation}) => {
 		showModalEdit(id)
 	}
 
-	const handleAdd = (id) => {
+	const handleAdd = () => {
 		showModal(true)
 	}
 
@@ -114,10 +121,10 @@ const EditComponent: React.SFC<Props> = ({navigation}) => {
 				flexDirection: 'row',
 			}}>
 				<Title title={`Editing level ${id}`} />
-				<Simple
+				<Custom
 					title="Add Item"
 					onPress={handleAdd}
-					styles={{margin: 10}}
+					extras={{margin: 10}}
 				/>
 			</View>
 
@@ -155,7 +162,7 @@ const EditComponent: React.SFC<Props> = ({navigation}) => {
 							/>
 						)
 					}}
-					keyExtractor={item => item.name}
+					keyExtractor={(item: TItem) => item.name}
 				/>
 
 				{/* {level.items.map((item) => <OneItem key={item.name} name={item.name} />)} */}
@@ -175,15 +182,17 @@ const EditItem = ({name, handleEdit}) => {
 
 	return (
 		<View style={modalStyle.middle}>
-			<TextInput
-				style={textInput}
-				onChangeText={setTitle}
-				value={newTitle}
-			/>
-			<ShortButton
-				title='Save'
-				onPress={doEdit}
-			/>
+			<View style={{flexDirection: 'row', alignItems: 'center'}}>
+				<TextInput
+					style={textInput}
+					onChangeText={setTitle}
+					value={newTitle}
+				/>
+				<Custom
+					title='Save'
+					onPress={doEdit}
+				/>
+			</View>
 		</View>
 	)
 }
@@ -192,7 +201,7 @@ interface OneItemProps {
 	name: string,
 	image?: string,
 	handleDelete: () => void,
-	handleEdit: (newName: string) => void,
+	handleEdit: () => void,
 }
 const OneItem: React.SFC<OneItemProps> = ({name, image, handleDelete, handleEdit}) => {
 	// const dispatch = useDispatch();
@@ -265,13 +274,15 @@ const OneItem: React.SFC<OneItemProps> = ({name, image, handleDelete, handleEdit
 
 			<ImageOrUpload image={image} />
 
-			<Simple
+			<Custom
 				title="Edit"
 				onPress={handleEdit}
+				extras={{margin: 5}}
 			/>
-			<Simple
+			<Custom
 				title="Delete"
 				onPress={handleDelete}
+				extras={{margin: 5}}
 			/>
 		</View>
 	)

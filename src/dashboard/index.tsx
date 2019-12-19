@@ -4,6 +4,7 @@ import {StyleSheet, View, Button} from 'react-native';
 import Levels from './levels'
 import {colours} from '../utils/constants'
 import {pageStyle} from '../utils/styles'
+import {Simple, Custom} from '../common/button'
 
 export default function DashboardModule({
 	navigation,
@@ -26,12 +27,12 @@ export default function DashboardModule({
 					<View style={{
 						marginBottom: 20,
 					}}>
-						<Button
+						<Custom
 							title="Feedback"
 							onPress={() => navigation.navigate('feedback')}
 						/>
 					</View>
-					<Button
+					<Custom
 						title="Admin"
 						onPress={() => navigation.navigate('admin')}
 					/>
