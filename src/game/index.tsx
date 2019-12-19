@@ -56,8 +56,10 @@ const Game: React.SFC<{itemsToQuestion: any, id: number, handleDone: any}> = ({
 
 	const handleSelect = (item) => {
 		if (item.correct) {
-			dispatch(addResult({user, level: id, item: item.id, attempts}))
-			handleDone()
+			setTimeout(() => {
+				dispatch(addResult({user, level: id, item: item.id, attempts}))
+				handleDone()
+			}, 1000)
 		} else {
 			addAttempt([...attempts, item.id])
 		}
