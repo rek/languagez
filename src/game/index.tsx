@@ -97,7 +97,6 @@ const Option = ({item, handleSelect}) => {
 
 	return (
 		<CustomButton
-			key={item.id}
 			onPress={handleClick}
 		>
 			<Image base64={item.image} style={styles.image} />
@@ -108,7 +107,7 @@ const Option = ({item, handleSelect}) => {
 const Options = ({options, handleSelect}) => {
 	return (
 		<View style={styles.optionBox}>
-			{options.map((item) => <Option item={item} handleSelect={handleSelect} />)}
+			{options.map((item) => <Option key={item.id} item={item} handleSelect={handleSelect} />)}
 		</View>
 	)
 }
