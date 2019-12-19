@@ -95,7 +95,7 @@ interface AddResult {
 	pass: boolean;
 }
 
-export function addResult({user, level, item, pass}: AddResult): AddResult {
+export function addResult({user, level, item, pass}: Partial<AddResult>): AddResult {
 	return {type: ADD_RESULT, user, level, item, pass}
 }
 
@@ -161,7 +161,7 @@ const ensureHistoryItem = (history, level, user) => {
 
 export const Reducer = (
 	state = initialState,
-	action: AddResult
+	action: AddResult | {type: 'default'}
 ) => {
 
 	switch (action.type) {

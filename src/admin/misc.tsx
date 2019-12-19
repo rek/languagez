@@ -32,6 +32,7 @@ const MiscComponent: React.SFC<Props> = ({}) => {
 			<Title title='Stats' />
 
 			{getHistory().map((item) => {
+				console.log('item', item)
 				return (
 					<View key={item.id}>
 						<Text>Level: {item.level}</Text>
