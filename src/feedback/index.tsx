@@ -4,31 +4,38 @@ import {useDispatch} from 'react-redux'
 
 import {addFeedback} from '../store/feedback';
 import Textarea from '../common/textarea'
+import Title from '../common/title'
 import {pageStyle} from '../utils/styles'
-import {Simple} from '../common/button'
+import {Custom} from '../common/button'
+import {message} from '../utils/message'
 
 export const Feedback = ({navigation}) => {
-	const [value, onChangeText] = React.useState('We would love to have your feedback, please type below:');
+	const [value, onChangeText] = React.useState<string>('');
 
 	const dispatch = useDispatch();
 
 	const handleSend = () => {
-		ToastAndroid.showWithGravity('', ToastAndroid.SHORT, ToastAndroid.CENTER);
+		message('Thanks, feedback submitted!');
 
 		dispatch(addFeedback(value))
 		onChangeText('')
 		Keyboard.dismiss()
+
+		navigation.navigate('dashboard')
 	}
 
 	return (
 		<View style={pageStyle.default}>
+			<Title title='We would love to have your feedback, please type below:'/>
+
 			<Textarea
 				onChangeText={onChangeText}
 				value={value}
 			/>
-			<Simple
+			<Custom
 				title="Send"
 				onPress={handleSend}
+				extras={{margin: 10}}
 			/>
 		</View>
 	)

@@ -15,7 +15,7 @@ import Image from '../common/image'
 import {textInput, modalStyle} from '../utils/styles';
 import {addItemToLevel, levelItemEdit, levelItemDelete, TItem} from '../store/levels';
 import Upload from '../common/upload'
-import {Custom, Simple, ShortButton} from '../common/button'
+import {Custom, Clickable as CustomButton} from '../common/button'
 import AlertDelete from '../common/alertDelete'
 
 const AddItem = ({id, closeModal}) => {
@@ -156,9 +156,10 @@ const EditComponent: React.SFC<Props> = ({navigation}) => {
 							<OneItem
 								name={name}
 								image={image}
+								handleUpload={handleUploadImage}
 								handleDelete={handleDelete(name)}
 								handleEdit={() => openEditModal(id)}
-								// handleEdit={handleEdit(id)}
+							// handleEdit={handleEdit(id)}
 							/>
 						)
 					}}
@@ -202,8 +203,9 @@ interface OneItemProps {
 	image?: string,
 	handleDelete: () => void,
 	handleEdit: () => void,
+	handleUpload: (image: string) => void,
 }
-const OneItem: React.SFC<OneItemProps> = ({name, image, handleDelete, handleEdit}) => {
+const OneItem: React.SFC<OneItemProps> = ({name, image, handleDelete, handleEdit, handleUpload}) => {
 	// const dispatch = useDispatch();
 	// console.log('{name, handleDelete}', {name, handleDelete})
 
@@ -233,29 +235,32 @@ const OneItem: React.SFC<OneItemProps> = ({name, image, handleDelete, handleEdit
 	// 	)
 	// }
 
-	const handleUpload = (image) => {
-		console.log('image', image)
-	}
-
 	const ImageOrUpload = ({image}) => {
-		if (image) {
-			return (
-				<Image base64={image} />
-			)
-		}
 
 		return (
 			<Upload
 				handleUpload={handleUpload}
 				renderUploadButton={({onPress}) => {
 					return (
-						<Simple
+						<Custom
 							title="Upload"
 							onPress={onPress}
 						/>
 					)
 				}}
-			/>
+			>
+				{({pickImage}) => {
+					if (image) {
+						return (
+							<CustomButton
+								onPress={pickImage}
+							>
+								<Image base64={image} />
+							</CustomButton>
+						)
+					}
+				}}
+			</Upload>
 		)
 	}
 

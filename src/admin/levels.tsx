@@ -7,7 +7,7 @@ import {addLevel} from '../store/levels'
 import {textInput} from '../utils/styles';
 import {message} from '../utils/message';
 import {colours} from '../utils/constants'
-import {Simple, Custom} from '../common/button'
+import {Custom} from '../common/button'
 
 export const AddLevel = ({navigation}) => {
 	const [value, updateValue] = React.useState('')
@@ -29,7 +29,7 @@ export const AddLevel = ({navigation}) => {
 	}
 
 	return (
-		<View>
+		<View style={{flexDirection: 'row'}}>
 			<TextInput
 				style={textInput}
 				onChangeText={updateValue}
@@ -37,10 +37,10 @@ export const AddLevel = ({navigation}) => {
 				value={value}
 			/>
 
-			<Simple
+			<Custom
 				title="Add level"
 				onPress={handleAdd}
-				styles={{width: 150, margin: 10}}
+				extras={{margin: 10}}
 			/>
 		</View>
 	)

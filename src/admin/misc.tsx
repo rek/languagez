@@ -3,7 +3,7 @@ import {useDispatch} from 'react-redux'
 import {View} from 'react-native'
 
 import Title from '../common/title'
-import {Simple} from '../common/button'
+import {Custom} from '../common/button'
 
 import {resetApp} from '../store'
 import {message} from '../utils/message'
@@ -21,7 +21,7 @@ const Component: React.SFC<Props> = ({}) => {
 	return (
 		<View>
 			<Title title='Internal admin options' />
-			<Simple
+			<Custom
 				title='Reset localstorage'
 				onPress={handleReset}
 			/>

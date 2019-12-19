@@ -1,4 +1,15 @@
+import {AppState} from './index';
+import {useSelector} from 'react-redux'
+
 const ADD_FEEDBACK = 'ADD_FEEDBACK'
+
+//
+// VIEWS
+//
+
+export function getFeedback() {
+	return useSelector((state: AppState) => state.FeedbackReducer.feedback)
+}
 
 //
 // ACTIONS

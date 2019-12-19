@@ -2,6 +2,7 @@ import {AppState} from './index';
 import {useSelector} from 'react-redux';
 
 import level1 from './fixtures/level1'
+import shuffle from '../utils/shuffle'
 
 const ADD_LEVEL = 'ADD_LEVEL'
 const DELETE_LEVEL = 'DELETE_LEVEL'
@@ -28,7 +29,7 @@ const isInList = (list, id) => {
 
 export function getLevelItem(level, exclusions = [], results = [], amount = 3) {
 	if (results.length === amount) {
-		return results
+		return shuffle(results)
 	}
 
 	// get an item not in the list and not excluded already
@@ -73,10 +74,10 @@ interface ActionItemEdit {
 	type: typeof LEVEL_ITEM_EDIT;
 	level: number;
 	itemId: string;
-	name: string;
+	payload: Partial<TItem>;
 }
-export function levelItemEdit({level, itemId, name}: Partial<ActionItemEdit>): ActionItemEdit {
-	return {type: LEVEL_ITEM_EDIT, level, itemId, name}
+export function levelItemEdit({level, itemId, payload}: Partial<ActionItemEdit>): ActionItemEdit {
+	return {type: LEVEL_ITEM_EDIT, level, itemId, payload}
 }
 
 interface ActionItemDelete {
@@ -145,11 +146,11 @@ export const Reducer = (
 			return {
 				levels: state.levels.map((level) => {
 					return level.id === action.level
-					? {
-						...level,
-						items: level.items.filter((item) => item.name !== action.item)
-					}
-					: level
+						? {
+							...level,
+							items: level.items.filter((item) => item.name !== action.item)
+						}
+						: level
 				})
 			}
 
@@ -163,7 +164,7 @@ export const Reducer = (
 								if (item.id === action.itemId) {
 									return {
 										...item,
-										name: action.name,
+										...action.payload,
 									}
 								} else {
 									return item

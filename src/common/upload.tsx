@@ -22,11 +22,14 @@ interface Props {
 	handleUpload?: (image: string) => void,
 	renderUploadButton?: ({onPress: any}) => React.ReactElement,
 	image?: string,
+	children?: ({pickImage}: any) => any
+	// children?: () => any
 }
 
 const Component: React.SFC<Props> = ({
 	handleUpload,
 	renderUploadButton,
+	children,
 	// image,
 }) => {
 	const [internalImage, setImage] = useState(null);
@@ -122,31 +125,19 @@ const Component: React.SFC<Props> = ({
 		return <Button onPress={pickImage} title="Upload" />
 	}
 
+	const render = () => {
+		{/* <Button onPress={takePhoto} title="Take a photo" /> */}
+		return <UploadButton />
+	}
+
 	return (
 		<View style={styles.container}>
 			<StatusBar barStyle="default" />
 
-			{/* <Button onPress={takePhoto} title="Take a photo" /> */}
-			<UploadButton />
-
-			{internalImage && (
-				<Image source={{uri: `data:image/jpeg;base64,${internalImage}`}} style={styles.maybeRenderImage} />
-
-				// <View style={styles.maybeRenderContainer}>
-				// 	<View style={styles.maybeRenderImageContainer}>
-				// 	</View>
-
-				// 	{/*
-				// 	<Text
-				// 		// onPress={copyToClipboard}
-				// 		// onLongPress={share}
-				// 		style={styles.maybeRenderImageText}
-				// 	>
-				// 		{internalImage}
-				// 	</Text>
-				// 	*/}
-				// </View>
-			)}
+			{children
+				? children({pickImage})
+				: render()
+			}
 
 			{uploading && (
 				<View style={[StyleSheet.absoluteFill, styles.maybeRenderUploading]}>
@@ -158,39 +149,39 @@ const Component: React.SFC<Props> = ({
 }
 
 // async function uploadImageAsync(uri) {
-	// console.log('uri', uri.base64)
+// console.log('uri', uri.base64)
 
-	// const apiUrl = "https://file-upload-example-backend-dkhqoilqqn.now.sh/upload";
+// const apiUrl = "https://file-upload-example-backend-dkhqoilqqn.now.sh/upload";
 
-	// // Note:
-	// // Uncomment this if you want to experiment with local server
-	// //
-	// // if (Constants.isDevice) {
-	// //   apiUrl = `https://your-ngrok-subdomain.ngrok.io/upload`;
-	// // } else {
-	// //   apiUrl = `http://localhost:3000/upload`
-	// // }
+// // Note:
+// // Uncomment this if you want to experiment with local server
+// //
+// // if (Constants.isDevice) {
+// //   apiUrl = `https://your-ngrok-subdomain.ngrok.io/upload`;
+// // } else {
+// //   apiUrl = `http://localhost:3000/upload`
+// // }
 
-	// const uriParts = uri.split(".");
-	// const fileType = uriParts[uriParts.length - 1];
+// const uriParts = uri.split(".");
+// const fileType = uriParts[uriParts.length - 1];
 
-	// const formData = new FormData();
-	// formData.append("photo", {
-	// 	uri,
-	// 	name: `photo.${fileType}`,
-	// 	type: `image/${fileType}`
-	// });
+// const formData = new FormData();
+// formData.append("photo", {
+// 	uri,
+// 	name: `photo.${fileType}`,
+// 	type: `image/${fileType}`
+// });
 
-	// const options = {
-	// 	method: "POST",
-	// 	body: formData,
-	// 	headers: {
-	// 		Accept: "application/json",
-	// 		"Content-Type": "multipart/form-data"
-	// 	}
-	// };
+// const options = {
+// 	method: "POST",
+// 	body: formData,
+// 	headers: {
+// 		Accept: "application/json",
+// 		"Content-Type": "multipart/form-data"
+// 	}
+// };
 
-	// return fetch(apiUrl, options);
+// return fetch(apiUrl, options);
 // }
 
 const styles = StyleSheet.create({

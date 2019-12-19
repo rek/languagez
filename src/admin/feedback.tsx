@@ -1,14 +1,14 @@
 import React from 'react'
 import {View} from 'react-native';
-import {useSelector} from 'react-redux'
 
 import Title from '../common/title'
+import {getFeedback} from '../store/feedback'
 
 interface Props {
 
 }
 const Component: React.SFC<Props> = ({}) => {
-	const items = useSelector(state => state.FeedbackReducer.feedback)
+	const items = getFeedback()
 
 	if (items.length === 0) {
 
