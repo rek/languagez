@@ -38,15 +38,15 @@ export const Clickable: React.SFC<{
 }> = ({
 	onPress, children, style
 }) => {
-	return (
-		<TouchableOpacity
-			style={style}
-			onPress={onPress}
-		>
-			{children}
-		</TouchableOpacity >
-	)
-}
+		return (
+			<TouchableOpacity
+				style={style}
+				onPress={onPress}
+			>
+				{children}
+			</TouchableOpacity >
+		)
+	}
 
 interface CustomProps {
 	style?: any,
@@ -82,6 +82,7 @@ const styles = StyleSheet.create({
 	default: {
 		alignItems: 'center',
 		backgroundColor: '#fff',
+		borderRadius: 10,
 		padding: 10
 	},
 	empty: {

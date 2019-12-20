@@ -141,6 +141,7 @@ const EditComponent: React.SFC<Props> = ({navigation}) => {
 				// flex: 1,
 				// alignItems: 'flex-start',
 				// flexDirection: 'column',
+				marginBottom: 60,
 			}}>
 				<FlatList
 					style={{

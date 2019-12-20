@@ -24,11 +24,13 @@ const Component: React.SFC<Props> = ({}) => {
 		dispatch(addUser(uuid()))
 	}
 
-	return (
-		<Text>
-			User: {user}
-		</Text>
-	)
+	return null
+
+	// return (
+	// 	<Text>
+	// 		User: {user}
+	// 	</Text>
+	// )
 }
 
 export default Component
