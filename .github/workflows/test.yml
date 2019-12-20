@@ -9,8 +9,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
+    - name: Install Yarn
+    - run: npm install -g yarn # Extra Step
     - name: Run test suite
-      run: npm install -g yarn # Extra Step
       run: |
         yarn
         yarn test
